@@ -1,0 +1,163 @@
+<div class="flex h-full flex-col">
+  <div class="flex items-center justify-between px-4 py-3 sm:py-3">
+    <h3 class="w-full flex items-center text-lg font-semibold">
+      <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="mr-2 h-5 w-5">
+        <circle cx="8" cy="21" r="1"></circle>
+        <circle cx="19" cy="21" r="1"></circle>
+        <path d="M2.05 2.05h2l2.66 12.42a2 2 0 0 0 2 1.58h9.78a2 2 0 0 0 1.95-1.57l1.65-7.43H5.12"></path>
+      </svg>
+      Carrito de Compras
+      <span *ngIf="cartService.totalItems() > 0" class="ml-2 rounded-full bg-blue-600 px-2 py-0.5 text-xs text-white">
+        {{ cartService.totalItems() }}
+      </span>
+      <div class="flex-1 shrink-0 flex items-center justify-end">
+        <button class="rounded-full p-1 text-gray-400 transition-colors hover:bg-gray-100 hover:text-gray-600" (click)="onClose()"><svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="h-5 w-5"><path d="M18 6 6 18"></path><path d="m6 6 12 12"></path></svg></button>
+      </div>
+    </h3>
+  </div>
+
+  <div class="h-px w-full bg-gray-200"></div>
+
+  <ng-container *ngIf="cartService.items().length === 0; else cartItems">
+    <div class="flex flex-1 flex-col items-center justify-center p-8 text-center">
+      <svg xmlns="http://www.w3.org/2000/svg" width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="mb-4 h-12 w-12 text-gray-400">
+        <circle cx="8" cy="21" r="1"></circle>
+        <circle cx="19" cy="21" r="1"></circle>
+        <path d="M2.05 2.05h2l2.66 12.42a2 2 0 0 0 2 1.58h9.78a2 2 0 0 0 1.95-1.57l1.65-7.43H5.12"></path>
+      </svg>
+      <h3 class="mb-1 text-lg font-medium">Tu carrito está vacío</h3>
+      <p class="text-sm text-gray-500">Agrega algunos libros para comenzar</p>
+
+      <button
+        (click)="navigateToOrders()"
+        class="mt-4 flex items-center rounded-md border border-gray-300 bg-white px-4 py-2 text-sm font-medium text-gray-700 shadow-sm hover:bg-gray-50"
+      >
+        <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="mr-2 h-4 w-4">
+          <rect x="2" y="3" width="20" height="14" rx="2" ry="2"></rect>
+          <line x1="8" y1="21" x2="16" y2="21"></line>
+          <line x1="12" y1="17" x2="12" y2="21"></line>
+        </svg>
+        Ver Mis Órdenes
+      </button>
+    </div>
+  </ng-container>
+
+  <ng-template #cartItems>
+    <div class="flex-1 overflow-auto px-4">
+      <!-- Cliente seleccionado o búsqueda de cliente -->
+      <div class="py-4 border-b border-gray-200">
+        <ng-container *ngIf="!selectedClient(); else clientSelected">
+          <app-client-search
+            (selectClient)="onSelectClient($event)"
+            (createNewClient)="onCreateNewClient()"
+          ></app-client-search>
+        </ng-container>
+
+        <ng-template #clientSelected>
+          <div class="mb-4">
+            <div class="flex items-center justify-between mb-2">
+              <label class="block text-sm font-medium text-gray-700">Cliente</label>
+              <button
+                (click)="removeSelectedClient()"
+                class="text-xs text-gray-500 hover:text-gray-700"
+              >
+                Cambiar
+              </button>
+            </div>
+            <div class="rounded-md border border-gray-200 bg-gray-50 p-3">
+              <div class="flex justify-between items-start">
+                <div>
+                  <h4 class="font-medium">{{ selectedClient()?.first_name }} {{ selectedClient()?.last_name }}</h4>
+                  <p class="text-xs text-gray-500">{{ selectedClient()?.doc_type }}: {{ selectedClient()?.doc_number }}</p>
+                  <p class="text-xs text-gray-500">{{ selectedClient()?.email }}</p>
+                </div>
+                <p class="text-xs text-gray-500">{{ selectedClient()?.phone }}</p>
+              </div>
+            </div>
+          </div>
+        </ng-template>
+      </div>
+      <!-- Tipo de comprobante -->
+      <div class="py-4 border-b border-gray-200">
+        <div class="mb-4">
+          <label class="block text-sm font-medium text-gray-700 mb-2">
+            Tipo de Comprobante
+          </label>
+          <div class="flex space-x-4">
+            @for(type of voucherTypes; track type) {
+              <div class="flex-1">
+                <button
+                  (click)="setVoucherType(type.value)"
+                  [ngClass]="{
+                    'w-full py-2 px-4 rounded-md border text-center transition-colors': true,
+                    'border-blue-500 bg-blue-50 text-blue-700 font-medium': voucherType() === type.value,
+                    'border-gray-300 bg-white text-gray-700 hover:bg-gray-50': voucherType() !== type.value
+                  }"
+                >
+                  <div class="flex items-center justify-center">
+                    <svg *ngIf="voucherType() === type.value" xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="mr-2 h-4 w-4 text-blue-500">
+                      <path d="M20 6 9 17l-5-5"></path>
+                    </svg>
+                    <span>{{ type.label }}</span>
+                  </div>
+                  <div class="text-xs mt-1 text-gray-500">
+                    {{ type.value === 'B' ? 'Para personas naturales' : 'Para empresas' }}
+                  </div>
+                </button>
+              </div>
+            }
+          </div>
+        </div>
+      </div>
+
+      <!-- Items del carrito -->
+      <div class="space-y-1 py-2 flex flex-col gap-2">
+        <app-cart-item
+          *ngFor="let item of cartService.items()"
+          [book]="item.book"
+          [quantity]="item.quantity"
+          (updateQuantity)="updateItemQuantity($event)"
+          (remove)="removeItem($event)"
+        ></app-cart-item>
+      </div>
+    </div>
+
+    <div class="border-t border-gray-200 p-4">
+      <div class="mb-4 flex justify-between">
+        <span class="font-medium">Total</span>
+        <span class="text-lg font-bold">S/{{ cartService.totalPrice() | toFixed }}</span>
+      </div>
+      <button
+        [ngClass]="{
+          'flex w-full items-center justify-center rounded-md px-4 py-3 text-sm font-medium text-white': true,
+          'bg-blue-600 transition-colors hover:bg-blue-700': canProceedToCheckout(),
+          'cursor-wait bg-blue-400': isCheckingOut,
+          'bg-gray-400 cursor-not-allowed': !canProceedToCheckout()
+        }"
+        (click)="handleCheckout()"
+        [disabled]="!canProceedToCheckout()"
+      >
+        <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="mr-2 h-4 w-4">
+          <rect width="20" height="14" x="2" y="5" rx="2"></rect>
+          <line x1="2" x2="22" y1="10" y2="10"></line>
+        </svg>
+        {{ isCheckingOut ? 'Procesando...' : 'Proceder al Pago' }}
+      </button>
+      <p *ngIf="!selectedClient()" class="mt-2 text-xs text-center text-red-500">
+        Debe seleccionar un cliente para continuar
+      </p>
+    </div>
+  </ng-template>
+
+  <!-- Modal para crear nuevo cliente -->
+  <app-modal
+    [isOpen]="isClientFormModalOpen()"
+    [title]="'Crear Nuevo Cliente'"
+    (close)="isClientFormModalOpen.set(false)"
+  >
+    <app-client-form
+      (formSubmit)="handleClientFormSubmit($event)"
+      (formCancel)="handleClientFormCancel()"
+    ></app-client-form>
+  </app-modal>
+</div>

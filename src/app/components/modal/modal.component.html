@@ -1,0 +1,21 @@
+@if(isOpen) {
+  <div class="fixed inset-0 z-50 flex items-center justify-center bg-black/50 p-4 modal-backdrop" (click)="onBackdropClick($event)">
+    <div class="w-full max-h-[95%] overflow-y-auto max-w-md rounded-lg bg-white shadow-xl" role="dialog" aria-modal="true">
+      <div class="flex items-center justify-between border-b border-gray-200 px-6 py-4">
+        <h2 class="text-lg font-semibold">{{ title }}</h2>
+        <button
+          (click)="onClose()"
+          class="rounded-full p-1 text-gray-400 transition-colors hover:bg-gray-100 hover:text-gray-600"
+        >
+          <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="h-5 w-5">
+            <path d="M18 6 6 18"></path>
+            <path d="m6 6 12 12"></path>
+          </svg>
+        </button>
+      </div>
+      <div class="p-6">
+        <ng-content></ng-content>
+      </div>
+    </div>
+  </div>
+}

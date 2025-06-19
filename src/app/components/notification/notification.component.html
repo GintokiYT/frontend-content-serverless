@@ -1,0 +1,30 @@
+<div class="fixed top-4 right-4 z-50 flex flex-col gap-2 w-full max-w-sm">
+  @for(notification of notifications(); track notification) {
+    <div
+      [ngClass]="getNotificationClasses(notification.type)"
+      [@fadeInOut]
+      class="mb-2"
+    >
+      <div [ngClass]="'flex-shrink-0 flex items-center justify-center w-12 ' + getIconClasses(notification.type)" [innerHTML]="getIconByType(notification.type)">
+      </div>
+
+      <div class="px-4 py-2 w-full">
+        <div class="mx-3">
+          <p class="text-sm">{{ notification.message }}</p>
+        </div>
+      </div>
+
+      <div class="flex-shrink-0 h-full flex items-center justify-center">
+        <button
+        class="flex-shrink-0 flex items-center justify-center h-full px-4 text-gray-400 hover:text-gray-700"
+        (click)="close(notification.id)"
+      >
+        <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="h-4 w-4">
+          <path d="M18 6 6 18"></path>
+          <path d="m6 6 12 12"></path>
+        </svg>
+      </button>
+      </div>
+    </div>
+  }
+</div>

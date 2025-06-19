@@ -1,0 +1,34 @@
+@if(isOpen) {
+  <div class="fixed inset-0 z-50 flex items-center justify-center bg-black/50 p-4 dialog-backdrop" (click)="onBackdropClick($event)">
+    <div class="w-full max-w-md rounded-lg bg-white p-6 shadow-xl" role="dialog" aria-modal="true">
+      <div class="mb-4">
+        <div class="flex items-center gap-2 text-red-600">
+          <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="h-5 w-5">
+            <path d="m21.73 18-8-14a2 2 0 0 0-3.48 0l-8 14A2 2 0 0 0 4 21h16a2 2 0 0 0 1.73-3Z"></path>
+            <path d="M12 9v4"></path>
+            <path d="M12 17h.01"></path>
+          </svg>
+          <h2 class="text-lg font-semibold">Confirmar eliminación</h2>
+        </div>
+        <p class="mt-2 text-sm text-gray-600">
+          ¿Estás seguro de que deseas eliminar el libro <span class="font-medium">"{{ bookTitle }}"</span>? Esta
+          acción no se puede deshacer.
+        </p>
+      </div>
+      <div class="flex justify-end gap-2">
+        <button
+          (click)="onClose()"
+          class="rounded-md border border-gray-300 bg-white px-4 py-2 text-sm font-medium text-gray-700 shadow-sm hover:bg-gray-50"
+        >
+          Cancelar
+        </button>
+        <button
+          (click)="onConfirm()"
+          class="rounded-md bg-red-600 px-4 py-2 text-sm font-medium text-white shadow-sm hover:bg-red-700"
+        >
+          Eliminar
+        </button>
+      </div>
+    </div>
+  </div>
+}

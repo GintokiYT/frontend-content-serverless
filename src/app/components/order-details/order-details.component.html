@@ -1,0 +1,118 @@
+@if(order) {
+  <div class="rounded-lg border border-gray-200 bg-white shadow">
+    <div class="border-b border-gray-200 bg-gray-50 px-6 py-4">
+      <div class="flex flex-col sm:flex-row sm:items-center sm:justify-between">
+        <h3 class="text-lg font-medium text-gray-900">
+          Detalles de {{ getVoucherTypeName(order.voucher_type) }} {{ order.voucher_number }}
+        </h3>
+        <div class="mt-2 sm:mt-0">
+          <span [ngClass]="{
+            'inline-flex items-center rounded-full px-2.5 py-0.5 text-xs font-medium': true,
+            'bg-green-100 text-green-800': order.voucher_type === 'B',
+            'bg-blue-100 text-blue-800': order.voucher_type === 'F'
+          }">
+            {{ getVoucherTypeName(order.voucher_type) }}
+          </span>
+        </div>
+      </div>
+    </div>
+
+    <div class="px-6 py-4">
+      <div class="grid grid-cols-1 gap-6 md:grid-cols-2">
+        <!-- Información del cliente -->
+        <div>
+          <h4 class="mb-2 text-sm font-medium text-gray-700">Información del Cliente</h4>
+          <div class="rounded-md border border-gray-200 bg-gray-50 p-3">
+            <p class="font-medium">{{ order.client.first_name }} {{ order.client.last_name }}</p>
+            <p class="text-sm text-gray-500">{{ order.client.doc_type }}: {{ order.client.doc_number }}</p>
+            <p class="text-sm text-gray-500">{{ order.client.email }}</p>
+            <p class="text-sm text-gray-500">{{ order.client.phone }}</p>
+          </div>
+        </div>
+
+        <!-- Información de la orden -->
+        <div>
+          <h4 class="mb-2 text-sm font-medium text-gray-700">Información de la Orden</h4>
+          <div class="rounded-md border border-gray-200 bg-gray-50 p-3">
+            <div class="flex justify-between">
+              <p class="text-sm text-gray-500">Número:</p>
+              <p class="text-sm font-medium">{{ order.voucher_number }}</p>
+            </div>
+            <div class="flex justify-between">
+              <p class="text-sm text-gray-500">Total:</p>
+              <p class="text-sm font-medium">S/{{ order.total | toFixed }}</p>
+            </div>
+            <div class="mt-2 flex justify-end">
+              <a
+                [href]="order.voucher_pdf"
+                target="_blank"
+                class="text-sm text-blue-600 hover:text-blue-800"
+              >
+                Descargar PDF
+              </a>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Detalles de productos -->
+      <div class="mt-6">
+        <h4 class="mb-2 text-sm font-medium text-gray-700">Productos</h4>
+        <div class="overflow-x-auto rounded-md border border-gray-200">
+          <table class="min-w-full divide-y divide-gray-200">
+            <thead class="bg-gray-50">
+              <tr>
+                <th scope="col" class="px-6 py-3 text-left text-xs font-medium uppercase tracking-wider text-gray-500">
+                  Producto
+                </th>
+                <th scope="col" class="px-6 py-3 text-left text-xs font-medium uppercase tracking-wider text-gray-500">
+                  Precio
+                </th>
+                <th scope="col" class="px-6 py-3 text-left text-xs font-medium uppercase tracking-wider text-gray-500">
+                  Cantidad
+                </th>
+                <th scope="col" class="px-6 py-3 text-left text-xs font-medium uppercase tracking-wider text-gray-500">
+                  Subtotal
+                </th>
+              </tr>
+            </thead>
+            <tbody class="divide-y divide-gray-200 bg-white">
+              <tr *ngFor="let detail of order.details">
+                <td class="whitespace-nowrap px-6 py-4">
+                  <div class="flex items-center">
+                    <div class="h-10 w-10 flex-shrink-0">
+                      <img class="h-10 w-10 rounded-md object-cover" [src]="detail.book.image" [alt]="detail.book.name">
+                    </div>
+                    <div class="ml-4">
+                      <div class="text-sm font-medium text-gray-900">{{ detail.book.name }}</div>
+                      <div class="text-xs text-gray-500">ISBN: {{ detail.book.isbn }}</div>
+                    </div>
+                  </div>
+                </td>
+                <td class="whitespace-nowrap px-6 py-4 text-sm text-gray-500">
+                  S/{{ detail.price | toFixed }}
+                </td>
+                <td class="whitespace-nowrap px-6 py-4 text-sm text-gray-500">
+                  {{ detail.quantity }}
+                </td>
+                <td class="whitespace-nowrap px-6 py-4 text-sm font-medium text-gray-900">
+                  S/{{ (detail.price * detail.quantity) | toFixed }}
+                </td>
+              </tr>
+            </tbody>
+            <tfoot class="bg-gray-50">
+              <tr>
+                <td colspan="3" class="whitespace-nowrap px-6 py-3 text-right text-sm font-medium text-gray-500">
+                  Total
+                </td>
+                <td class="whitespace-nowrap px-6 py-3 text-sm font-medium text-gray-900">
+                  S/{{ order.total | toFixed }}
+                </td>
+              </tr>
+            </tfoot>
+          </table>
+        </div>
+      </div>
+    </div>
+  </div>
+}

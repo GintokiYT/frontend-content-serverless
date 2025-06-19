@@ -1,0 +1,11 @@
+<div
+  [ngClass]="{
+    'fixed inset-y-0 right-0 z-50 w-full max-w-md transform bg-white shadow-xl transition-transform duration-300 ease-in-out': true,
+    'translate-x-0': isOpen,
+    'translate-x-full': !isOpen
+  }"
+>
+  <div class="h-full overflow-hidden">
+    <ng-content></ng-content>
+  </div>
+</div>

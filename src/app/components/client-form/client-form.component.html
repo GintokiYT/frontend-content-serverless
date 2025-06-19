@@ -1,0 +1,138 @@
+<form [formGroup]="clientForm" (ngSubmit)="onSubmit()" class="space-y-4">
+  <div class="grid grid-cols-2 gap-4">
+    <div class="space-y-2">
+      <label for="doc_type" class="block text-sm font-medium text-gray-700">
+        Tipo de Documento
+      </label>
+      <select
+        id="doc_type"
+        formControlName="doc_type"
+        class="w-full rounded-md border border-gray-300 px-3 py-2 text-gray-900 focus:border-blue-500 focus:outline-none focus:ring-1 focus:ring-blue-500"
+      >
+        @for(type of docTypes; track type) {
+          <option [value]="type.value">{{ type.label }}</option>
+        }
+      </select>
+      @if(hasError('doc_type', 'required')) {
+        <p class="mt-1 text-xs text-red-600">
+          El tipo de documento es requerido
+        </p>
+      }
+    </div>
+
+    <div class="space-y-2">
+      <label for="doc_number" class="block text-sm font-medium text-gray-700">
+        Número de Documento
+      </label>
+      <input
+        id="doc_number"
+        formControlName="doc_number"
+        type="text"
+        class="w-full rounded-md border border-gray-300 px-3 py-2 text-gray-900 placeholder-gray-400 focus:border-blue-500 focus:outline-none focus:ring-1 focus:ring-blue-500"
+      />
+      @if(hasError('doc_number', 'required')) {
+        <p class="mt-1 text-xs text-red-600">
+          El número de documento es requerido
+        </p>
+      }
+      @if(hasError('doc_number', 'minlength')) {
+        <p class="mt-1 text-xs text-red-600">
+          El número de documento debe tener al menos 5 caracteres
+        </p>
+      }
+    </div>
+  </div>
+
+  <div class="grid grid-cols-2 gap-4">
+    <div class="space-y-2">
+      <label for="first_name" class="block text-sm font-medium text-gray-700">
+        Nombres
+      </label>
+      <input
+        id="first_name"
+        formControlName="first_name"
+        type="text"
+        class="w-full rounded-md border border-gray-300 px-3 py-2 text-gray-900 placeholder-gray-400 focus:border-blue-500 focus:outline-none focus:ring-1 focus:ring-blue-500"
+      />
+      @if(hasError('first_name', 'required')) {
+        <p class="mt-1 text-xs text-red-600">
+          El nombre es requerido
+        </p>
+      }
+    </div>
+
+    <div class="space-y-2">
+      <label for="last_name" class="block text-sm font-medium text-gray-700">
+        Apellidos
+      </label>
+      <input
+        id="last_name"
+        formControlName="last_name"
+        type="text"
+        class="w-full rounded-md border border-gray-300 px-3 py-2 text-gray-900 placeholder-gray-400 focus:border-blue-500 focus:outline-none focus:ring-1 focus:ring-blue-500"
+      />
+      @if(hasError('last_name', 'required')) {
+        <p class="mt-1 text-xs text-red-600">
+          El apellido es requerido
+        </p>
+      }
+    </div>
+  </div>
+
+  <div class="grid grid-cols-2 gap-4">
+    <div class="space-y-2">
+      <label for="phone" class="block text-sm font-medium text-gray-700">
+        Teléfono
+      </label>
+      <input
+        id="phone"
+        formControlName="phone"
+        type="tel"
+        class="w-full rounded-md border border-gray-300 px-3 py-2 text-gray-900 placeholder-gray-400 focus:border-blue-500 focus:outline-none focus:ring-1 focus:ring-blue-500"
+      />
+      @if(hasError('phone', 'required')) {
+        <p class="mt-1 text-xs text-red-600">
+          El teléfono es requerido
+        </p>
+      }
+    </div>
+
+    <div class="space-y-2">
+      <label for="email" class="block text-sm font-medium text-gray-700">
+        Email
+      </label>
+      <input
+        id="email"
+        formControlName="email"
+        type="email"
+        class="w-full rounded-md border border-gray-300 px-3 py-2 text-gray-900 placeholder-gray-400 focus:border-blue-500 focus:outline-none focus:ring-1 focus:ring-blue-500"
+      />
+      @if(hasError('email', 'required')) {
+        <p class="mt-1 text-xs text-red-600">
+          El email es requerido
+        </p>
+      }
+      @if(hasError('email', 'email')) {
+        <p class="mt-1 text-xs text-red-600">
+          Ingrese un email válido
+        </p>
+      }
+    </div>
+  </div>
+
+  <div class="flex justify-end space-x-2 pt-4">
+    <button
+      type="button"
+      (click)="onCancel()"
+      class="rounded-md border border-gray-300 bg-white px-4 py-2 text-sm font-medium text-gray-700 shadow-sm hover:bg-gray-50"
+    >
+      Cancelar
+    </button>
+    <button
+      type="submit"
+      class="rounded-md bg-blue-600 px-4 py-2 text-sm font-medium text-white shadow-sm hover:bg-blue-700"
+    >
+      Guardar Cliente
+    </button>
+  </div>
+</form>
